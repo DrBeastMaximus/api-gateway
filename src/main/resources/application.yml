@@ -1,0 +1,22 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: shorten-service
+          uri: lb://SHORTEN-SERVICE
+          predicates:
+            - Path=/url/**
+          filters:
+            - AuthenticationFilter
+
+        - id: redirect
+          uri: lb://SHORTEN-SERVICE/url/s/
+          predicates:
+            - Path=/url/s/
+
+        - id: auth-service
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - AuthenticationFilter
